@@ -1,687 +1,291 @@
-<h2> EssentialsX </h5>
-<h3> Features </h3>
+# EnvyEssentialsPremium
 
+A comprehensive and premium utility plugin for Unturned, designed to enhance server management, gameplay experience, and administrative control.
 
- - Kits 
- - VoteDayNight
- - AutoClearConfig
- - AntiSpam
- - NoName
- - SpawnProtectionConfiguration
- - DeathMessages
- - Duty
- - TPA
- - Home
- - ItemBlock
- - Warps
- - BlockDamage
- - CheckLag
- - Stats
- - NoGlobalMessages
- - TextCommands
- - Block Repair
- - Decal Remover
- - Ranks
- - Vaults
- - AntiAdminAbuse
- - OldGravity
- - JoinMessages
- - Lobby (/SETLOBBY)
- - SalvageModifier
- - AnnouncerConfig
- - CommandHelper
+---
 
+## 📑 Table of Contents
+1. [Requirements](#-requirements)
+2. [Privacy and Tracking](#-privacy-and-tracking)
+3. [Global Configuration](#-global-configuration)
+4. [Kits System](#kits-system)
+5. [Teleportation (TPA) System](#teleportation-tpa-system)
+6. [Home & Warp Systems](#home--warp-systems)
+7. [Stats & Rankings](#stats--rankings)
+8. [Rank Advancement System](#rank-advancement-system)
+9. [Vaults Virtual Storage](#vaults-virtual-storage)
+10. [Filter System (Auto-Pickup)](#filter-system-auto-pickup)
+11. [Catch Inventory System](#catch-inventory-system)
+12. [Utility Modules](#utility-modules)
+13. [Administrative Commands](#administrative-commands)
+14. [Complete Command Reference](#complete-command-reference)
 
-<h2>Kits</h2>
+---
 
+## ⚠️ Requirements
 
+> [!IMPORTANT]
+> This plugin **requires OpenMod** to function. Installation is mandatory. The plugin is designed to attempt an automatic installation of OpenMod if it is not detected on startup.
 
-<h4>Commands</h4>
+---
 
-1. /createkit, /ckit, /kicreate  <b>[[Syntax]] /createkit [name] [cooldown] [permission]</b>
-   - With this command, you can create kits (Copy your inventory at the time of creating the kit).
-2. /deletekit, /delkit /dkit  <b>[[Syntax]] /createkit [name]</b>
-   - With this command, you can delete the kit that is inside /kits.
-3. /kit  <b>[[Syntax]] /kit [name]</b>
-   - With this command, you can select a kit created using /kit <name>.
-4. /kitcooldown, /kitcd  <b>[[Syntax]] /kitcooldown [kit]</b>
-   - With this command, you can set a different cooldown for a kit.
-5. /kiteconomy, /kiteco, /kite, /kitexperience /kitex <b>[[Syntax]] /kiteconomy [kit] [balance]</b>
-   - With this command, you can set a different cooldown for a kit.
-6. /kits <b>[[Syntax]] /kits[kit]</b>
-   - With this command, you can see a list in the in-game chat of all the kits that the player has access to.
-7. /kitvehicle, /kitv  <b>[[Syntax]] /kitvehicle [kit] [vehicleId]</b>
-   - With this command, you can view a list in the in-game chat of all the kits that the player has access to.
-8. /migratekit <b style=color:red>WARNING: </b>
-     - <p style=color:red>This command is only used in case you have your kits in AviKits and want to migrate them to <b>EssentialsX</b>, but it's not 100% accurate. Some kits may generate incorrectly and lose some items. It is recommended to review them.</p>
+## 🔒 Privacy and Tracking
 
-<hr />
-<h5>Configuration</h5>
+This plugin monitors player connectivity data to ensure server security and identify potential alt-account abuse.
+- **Data Collected:** Hardware ID (HWID) and Username.
+- **Storage:** Data is logged in the `PlayersData.json` file inside the `EssentialsX/Data` folder.
+- **Commands:** The `/ess investigate [player]` command uses this data to track multi-accounts and historical connections.
 
+---
+
+## ⚙️ Global Configuration
+
+### DropEssentialsXBanList
+Enable or disable the private "creator-provided" ban list. This list contains known hackers and is maintained by the developers. While you cannot edit the list itself, you can choose whether or not to apply it to your server.
+
+### EnableDAVEHealthBar (QoL)
+Activates a visual health bar for bosses in the **Escalation** map mode. This improves the gameplay experience by allowing players to track boss damage in real-time.
+
+### AutoPickupItems
+Automatically collects items from the ground near the player. This is a configurable setting that can be toggled to streamline the looting process.
+
+### ShowHealthBarOnHitPlayer
+Enable or disable a visual health bar for players when you hit them. This feature allows you to see the current HP of an opponent immediately after dealing damage. It can be easily toggled on or off in the configuration file.
+
+---
+
+## Kits System
+
+Kits allow players to receive predefined sets of items based on their rank or permissions.
+
+#### Commands
+1. `/createkit [name] [cooldown] [permission]` - Creates a kit using your current inventory contents.
+2. `/deletekit [name]` - Deletes an existing kit.
+3. `/kit [name]` - Claims a specific kit.
+4. `/kits` - Displays all kits you have access to.
+5. `/kitcooldown [kit] [seconds]` - Sets the cooldown for a specific kit.
+6. `/kitvehicle [kit] [vehicleId]` - Attaches a vehicle to the kit.
+7. `/migratekit` - **WARNING:** Attempts to migrate kits from "AviKits" to EssentialsX. This process may lose some items; review kits after migration.
+
+#### Configuration Example
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<EnvyKitsConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<EnvyKitsConfiguration>
   <UseEconomy>false</UseEconomy>
-  <icon>url here</icon>
+  <icon>URL_HERE</icon>
 </EnvyKitsConfiguration>
 ```
 
-<h5>Translations</h5>
-
+#### Translations Snippet
 ```xml
-<?xml version="1.0" encoding="utf-8"?>
-<Translations xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Translations>
   <Translation Id="kit:exist" Value="The kit already exists" />
-  <Translation Id="kit:nokits" Value="Unable to Find Kits" />
-  <Translation Id="kit:list" Value="Kits: {0}" />
   <Translation Id="kit:notfound" Value="The kit {0} does not exist" />
-  <Translation Id="kit:nopermissions" Value="You do not have sufficient permissions to use any kit" />
-  <Translation Id="kit:nopermission" Value="You do not have sufficient permissions to use this kit." />
-  <Translation Id="kit:delete" Value="The kit {0} has been removed" />
-  <Translation Id="kit:nomoney" Value="You don't have enough money to buy: {0}" />
-  <Translation Id="kit:create" Value="You have created the kit {0}" />
-  <Translation Id="kit:give:admin" Value="You have received the kit {0} by the administrator" />
-  <Translation Id="kit:give" Value="Has obtenido el kit {0}" />
-  <Translation Id="kit:cooldown" Value="You have to wait {0} seconds to use the kit again" />
+  <Translation Id="kit:cooldown" Value="You must wait {0} seconds to use this again" />
 </Translations>
 ```
 
-<h3>Auto Clear Config</h3>
-Enabling this function deletes the items on the ground or those configured within the settings.
-<hr />
+---
 
+## Teleportation (TPA) System
 
-<h5>Configuration</h5>
+A robust request-based teleportation system.
 
-1. <b>Time_Barricades / Barricades</b>
-   - Activating this option for the configured time will remove barricades (Lockers, Signs, Beds, etc).
-2. <b>Time_Items / Items</b>
-   - Activating this option for the configured time will remove all objects from the floor of the map.
-3. <b>Time_Vehicles / Vehicles</b>
-   - Enabling this option for the configured time will remove all items from the floor of the map
-4. <b>Time_Structures / Structures</b>
-   - Activating this option for the configured time will remove structures (Wooden floors, metal floors, pillars, etc).
-<h3>Anti Spam</h3>
-This prevents users from sending the same message repeatedly and spamming the chat.
+- **Usage:**
+    - `/tpa [player]` - Send a teleport request.
+    - `/tpa mode [global | group]` - Switch your TPA privacy mode.
+        - `global`: Anyone can send you TPA requests.
+        - `group`: Only members of your current group can request to teleport to you.
 
-<hr />
+- **Configuration:**
+    - **Interval:** Cooldown between teleports.
+    - **Expiration:** Time before a request expires.
 
+---
 
-<h5>Configuration</h5>
+## Home & Warp Systems
 
-1. <b>Enable</b>
-   - Enable/Disable
-2. <b>Interval</b>
-   - The waiting time to be able to send a message after another.
+### Home
+Allows players to teleport to their claimed bed.
+- **Command:** `/home`
+- **Config:** `Block Moving` - If enabled, moving during the teleport countdown will cancel the action.
 
+### Warps
+Public or private points of interest.
+- **Commands:** 
+    - `/createwarp [name] [permission] [interval]` - Sets a warp at your current position.
+    - `/warp [name]` - Teleport to the warp.
+    - `/warps` - Lists all available warps.
+- **Config:** `Interval` and `Expiration` times for warp usage.
 
+---
 
-<h3>NoName</h3>
-The users within the server cannot see the name of another person's character. <br/>
- <p style="color: red"> Use For  Roleplay</p>
-<hr />
+## Stats & Rankings
 
+Keep track of player accomplishments and performance on your server.
+- **Commands:**
+    - `/stats [player]` - View detailed Kills, Deaths, and other metrics.
+    - `/ranking` - Displays the TOP players on the server.
+- **Config:** `Top Max` - Set the number of players shown in the ranking.
 
-<h5>Configuration</h5>
+---
 
-1. <b>Enable</b>
-   - Enable/Disable
-2. <b>Bypass</b>
-   - When you activate the bypass, administrators will only be able to see the names of the players.
-<h3>SpawnProtection</h3>
-When you respawn, you appear with a spawn protection.
-<hr />
+## Rank Advancement System
 
+Automatically promote players based on their in-game achievements.
 
-<h5>Configuration</h5>
+#### Usage Guide
+1. Enable `RankConfig` in the main configuration.
+2. Run `/rocket reload EssentialsX`.
+3. A `Ranks.json` file will be generated in the plugin folder.
+4. Edit `Ranks.json` to define requirements (Zombies killed, Reputation, etc.).
+5. Ranks are synced with `Permissions.xml` automatically.
 
-1. <b>Enable</b>
-   - Enable/Disable
-2. <b>Vanish Mode</b>
-   - This option allows players to appear invisible.
-3. <b>Expire On Execute Command</b>
-   - When any command is used, the protection is removed.
-4. <b>Protection Seconds</b>
-   - The time a player has for protection.
-<h3>Death Messages</h3>
-It displays messages of player deaths or their killers, and everything can be configured, from the images to the colors.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-2. <b>Show Location</b>
-   -  Enable/Disable
-<h3>Duty</h3>
-Allows players to remove their administrator powers using a command ("/DUTY").
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-2. <b>Permission</b>
-   -  Set Permission
-<h3>TPA</h3>
-Allows sending teleportation requests to other players, and they can choose to accept or decline them.
-<hr />
-
-<h4>Commands</h4>
-
-1. /tpa  <b>[[Syntax]] /tpa [player] </b>
-   - With this command, you can send TPA to other players
-2. /tpa  <b>[[Syntax]] /tpa mode [group/global]</b>
-   - If you enter "/tpa mode group," only players in your group can send you teleportation requests, and if you enter "/tpa mode global," anyone can send you requests.
-
-<h5>Configuration</h5>
-
-1. <b>Interval</b>
-   - Set Interval Time
-2. <b>Expiration</b>
-   - Set Expiration Time
-<h3>Home</h3>
-Allows you to teleport to your bed.
-<hr />
-
-<h4>Commands</h4>
-
-1. /home
-
-<h5>Configuration</h5>
-
-1. <b>Interval</b>
-   - Set Interval Time
-2. <b>Block Moving</b>
-   - If the player moves while in the cooldown or interval period, the teleportation is canceled.
-
-<h3>Item Block</h3>
-This option is in <b>BETA</b> state, but it allows blocking the items that the user picks up.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-
-```
-    <Items>
-      <Item ID="363" Permission="bypass.363" />
-    </Items>
-```
-
-<h3>Warp</h3>
-Allows you to set teleportation locations.
-<hr />
-
-<h4>Commands</h4>
-
-1. /createwarp, /cwarp, /setwarp <b>[[Syntax]] /createwarp [name] [permission] [interval] </b>
-   - With this command, you create a point where you are standing so that players can teleport to it using "/warp [name]."
-2. /deletewarp, /delwarp <b>[[Syntax]] /deletewarp [name]</b>
-   - Delete warp
-2. /warp<b>[[Syntax]] /warp [name]</b>
-   - With this command, you can teleport to a specific point.
-2. /warps
-   - With this command, you can view a list of teleportation points available and use "/warp [name]" to teleport to a specific one.
-
-<h5>Configuration</h5>
-
-1. <b>Interval</b>
-   - Set Interval Time
-2. <b>Expiration</b>
-   - Set Expiration Time
-<h3>Block Damage</h3>
-Allows blocking raid damage to configured entities, including damage to structures, barricades, and wheeled vehicles.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-1. <b>BlockDamageOfBarricades</b>
-   - Enable/Disable
-1. <b>BlockDamageOfVehicles</b>
-   - Enable/Disable
-1. <b>BlockDamageOfStructure</b>
-   - Enable/Disable
-1. <b>BlockDamageOfVehicles_Tire</b>
-   - Enable/Disable
-
-<h3>CheckLag</h3>
-Allows the server to perform a restart when the TPS (Ticks Per Second) falls below 20 or 10. This is a common occurrence when the server has been running for an extended period without restarting, leading to a significant drop in TPS.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-1. <b>AutoShutdown</b>
-   - Enable/Disable
-1. <b>Seconds</b>
-   - Set Seconds
-
-<h3>Stats</h3>
-Allows you to have a record of all the statistics of players within the server, including kills, deaths, etc.
-<hr />
-
-
-<h4>Commands</h4>
-
-1. /stats <b>[[Syntax]] /stats [player] </b>
-   - With this command, you can view the statistics of another player.
-2. /stats 
-   - With this command, you can view your statistics.
-2. /ranking
-   - With this command, you can see TOP players
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-2. <b>Top Max</b>
-<h3>No Global Messages</h3>
-Allows users, except administrators, to write in WORLD; they can only write in AREA or GROUP.  <br />
-<p style="color:red">(This is for roleplay purposes.)</p>
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-
-<h3>TPA</h3>
-Allows sending teleportation requests to other players, and they can choose to accept or decline them.
-<hr />
-
-<h4>Commands</h4>
-
-1. /tpa  <b>[[Syntax]] /tpa [player] </b>
-   - With this command, you can send TPA to other players
-2. /tpa  <b>[[Syntax]] /tpa mode [group/global]</b>
-   - If you enter "/tpa mode group," only players in your group can send you teleportation requests, and if you enter "/tpa mode global," anyone can send you requests.
-
-<h5>Configuration</h5>
-
-1. <b>Interval</b>
-   - Set Interval Time
-2. <b>Expiration</b>
-   - Set Expiration Time
-<h3>Home</h3>
-Allows you to teleport to your bed.
-<hr />
-
-<h4>Commands</h4>
-
-1. /home
-
-<h5>Configuration</h5>
-
-1. <b>Interval</b>
-   - Set Interval Time
-2. <b>Block Moving</b>
-   - If the player moves while in the cooldown or interval period, the teleportation is canceled.
-<h3>Item Block</h3>
-This option is in <b>BETA</b> state, but it allows blocking the items that the user picks up.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-
-```
-    <Items>
-      <Item ID="363" Permission="bypass.363" />
-    </Items>
-```
-
-<h3>Warp</h3>
-Allows you to set teleportation locations.
-<hr />
-
-<h4>Commands</h4>
-
-1. /createwarp, /cwarp, /setwarp <b>[[Syntax]] /createwarp [name] [permission] [interval] </b>
-   - With this command, you create a point where you are standing so that players can teleport to it using "/warp [name]."
-2. /deletewarp, /delwarp <b>[[Syntax]] /deletewarp [name]</b>
-   - Delete warp
-2. /warp<b>[[Syntax]] /warp [name]</b>
-   - With this command, you can teleport to a specific point.
-2. /warps
-   - With this command, you can view a list of teleportation points available and use "/warp [name]" to teleport to a specific one.
-
-<h5>Configuration</h5>
-
-1. <b>Interval</b>
-   - Set Interval Time
-2. <b>Expiration</b>
-   - Set Expiration Time
-<h3>Block Damage</h3>
-Allows blocking raid damage to configured entities, including damage to structures, barricades, and wheeled vehicles.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-1. <b>BlockDamageOfBarricades</b>
-   - Enable/Disable
-1. <b>BlockDamageOfVehicles</b>
-   - Enable/Disable
-1. <b>BlockDamageOfStructure</b>
-   - Enable/Disable
-1. <b>BlockDamageOfVehicles_Tire</b>
-   - Enable/Disable
-
-<h3>CheckLag</h3>
-Allows the server to perform a restart when the TPS (Ticks Per Second) falls below 20 or 10. This is a common occurrence when the server has been running for an extended period without restarting, leading to a significant drop in TPS.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-1. <b>AutoShutdown</b>
-   - Enable/Disable
-1. <b>Seconds</b>
-   - Set Seconds
-
-
-<h3>Stats</h3>
-Allows you to have a record of all the statistics of players within the server, including kills, deaths, etc.
-<hr />
-
-
-<h4>Commands</h4>
-
-1. /stats <b>[[Syntax]] /stats [player] </b>
-   - With this command, you can view the statistics of another player.
-2. /stats 
-   - With this command, you can view your statistics.
-2. /ranking
-   - With this command, you can see TOP players
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-2. <b>Top Max</b>
-<h3>No Global Messages</h3>
-Allows users, except administrators, to write in WORLD; they can only write in AREA or GROUP.  <br />
-<p style="color:red">(This is for roleplay purposes.)</p>
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-
-
-<h3>Block Repair</h3>
-
-Allows users to be unable to repair barricades, vehicles, or structures, all of which are configurable.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-1. <b>Barricades</b>
-   - Enable/Disable
-1. <b>Structures</b>
-   - Enable/Disable
-1. <b>Vehicles</b>
-   - Enable/Disable
-<h3>Decal Remover</h3>
-
-This option allows you to clean up unnecessary effects within the game, such as tree leaves, wood particles, smoke, bullet impacts, and more.
-<b>+FPS</b>
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-<h3>Vaults</h3>
-
-Allows users to have additional chest spaces using commands.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-
-```
-Example.
-    <Vaults>
-      <Vault Name="VIP" Permission="vault.vip" SizeX="50" SizeY="50" />
-      <Vault Name="USER" Permission="vault.user" SizeX="10" SizeY="10" />
-    </Vaults>
-```
-<h3>CommandHelper</h3>
-
-With this enabled, whenever a person enters a command like "/wa," they will see that they have access to "/warps" or "/warp" (provided they have the necessary permissions for those commands).
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-
-<h3>Announcer</h3>
-
-Allows sending announcements at regular intervals within the server to inform users.
-<hr />
-
-
-<h5>Configuration</h5>
-
-1. <b>Enable</b>
-   - Enable/Disable
-
-```
-<Messages>
-      <Message Message="#1 - No Hacks" Image="url here" />
-      <Message Message="#1 - No Toxic" Image="url here" />
-      <Message Message="#1 - No Bugs" Image="url here" />
-    </Messages>
-```
-
-<h3>Commands EssentialX</h3>
-
-Generally, it has all the most commonly used commands from Avi and Essentials, and I've only added a few that I found useful.
-<hr />
-
-
-<h5>Commands</h5>
-
-1. <b>/catch [player]</b>
-   - With this command, you can view a player's inventory as if it were a chest and loot or remove their weapons, similar to Minecraft's "/invsee."
-1. <b>/door</b>
-   - With this command, you can open doors of any player (provided you have permissions and are looking at the door).
-1. <b>/storage </b>
-   - With this command, you can open storages of any player (provided you have permissions and are looking at the storage).
-
-1. <b>/speed [number]</b>
-   - With this command, you can increase your speed.
-1. <b>/sudo [player] or [*]</b>
-   - If you use *, you are executing this command for all users on the server, for example: /sudo * "/tpa Margarita".
-   - You can also send messages using /sudo * "hello world," and everyone will write "hello world."
-   - You can execute the command for a single person using, for example: /sudo Margarita "/kit maplestrike."
-
-
-
-
-
-
-<h3>TextCommands</h3>
-
-With this option, you can enable text commands, create commands that only return useful text for creating rules
-<hr />
-
-```
-  <TextCommand Name="rules" Icon="" Help=":V">
-      <Messages>
-        <string>No Hack</string>
-        <string>No Bug - No Toxic</string>
-        <string>FUN :P</string>
-      </Messages>
-    </TextCommand>
-```
-
-
-
-<h3>Anti Admin Abuse</h3>
-
-When enabling this option, all administrators, while using GOD, VANISH, or AERIAL CAMERA, will send a message to the general chat indicating that the administrator is abusing their power.
-<hr />
-
-
-<h3>Old Gravity</h3>
-
-Enabling this option allows you to configure the player's gravity
-<hr />
-
-```  
-<OldGravityConfig Enabled="false">
-    <GravityMultiplier>0.97</GravityMultiplier>
-  </OldGravityConfig>
-```
-
-
-
-<h3>Join Messages</h3>
-
-You can enable player entry/exit messages
-<hr />
-
-```  
-  <JoinMessagesConfig Enabled="true" />
-```
-
-
-<h3>Lobby</h3>
-
-By placing a 'SetLobby' command at the point where you put this command, all players will appear in the Lobby when they connect or respawn.
-<hr />
-
-<h5> Commands </h5>
-
- - /setlobby
-
-```  
-  <LobbyConfiguration Enabled="true" PositionCoords="" />
-```
-
-<h3>Ranks</h3>
-
-It allows you to create ranks within the server and grant ranks to users as a reward for achieving an accomplishment
-<hr />
-
-<h4> Usage </h5>
-
- 1. If you enable '**RankConfig**' in the configuration and set it to **True**, and then execute 
-
- 
-
->        /rocket reload essentialsX
-
- Go  **Rocket/Plugins/EssentialsX** folder, a file named 'Ranks.json' will be generated.
-
- 2.  Ranks Default:
-
-```xml
+#### Ranks.json Example
+```json
+{
+  "Rank": [
     {
-    "Rank": [
-      {
-        "Name": "rango1",
-        "Reputation": -1000,
-        "Crafting": 0,
-        "Zombies": 0,
-        "MegaZombies": 0,
-        "FoundedItems": 0,
-        "FoundedPlants": 0,
-        "Fishing": 0,
-        "Animals": 0,
-        "GroupToWin": "rango1"
-      },
-      {
-        "Name": "rango2",
-        "Reputation": -2000,
-        "Crafting": 0,
-        "Zombies": 0,
-        "MegaZombies": 0,
-        "FoundedItems": 0,
-        "FoundedPlants": 0,
-        "Fishing": 0,
-        "Animals": 0,
-        "GroupToWin": "rango2"
-      },
-      {
-        "Name": "rango3",
-        "Reputation": -3000,
-        "Crafting": 0,
-        "Zombies": 0,
-        "MegaZombies": 0,
-        "FoundedItems": 0,
-        "FoundedPlants": 0,
-        "Fishing": 0,
-        "Animals": 0,
-        "GroupToWin": "rango3"
-      }
-    ]
-  }
-]
-```
-<h4> Information</h5>
-
-The rank system, those listed within **'Ranks.json'** in the **Rocket/Plugins/EssentialsX** folder, will automatically create ranks within the **Permissions.xml** when you restart using 
-
-    /rocket reload essentialsX
-
- or when you start the server. ***It's important to note that it generates the default three sample ranks, so it's necessary to delete them if you don't want them***
-
-<h3>Salvage Modifier</h3>
-
-With this option, you can change the speed of building structures or barricades within the game, and you can configure it so that different users have different speeds
-<hr />
-
-
-
-*The lower the '**Force**' value, the faster it will remove structures. It allows decimals*
-
-
-```  
-   <SalvageRanks>
-      <SalvageRanks Permission="marga.vipalto" Force="3" />
-      <SalvageRanks Permission="marga.vipnoob" Force="5" />
-    </SalvageRanks>
+      "Name": "rank1",
+      "Reputation": 1000,
+      "Zombies": 500,
+      "GroupToWin": "VIP"
+    }
+  ]
+}
 ```
 
+---
 
-<h3>Command Helper</h3>
+## Vaults Virtual Storage
 
-Enabling this option allows users that when they execute a command that doesn't exist, it provides them with help. For example, if a user enters /tpe, and it doesn't exist but /tpa does, it will show that /tpa is a valid command
-<hr />
+Provides players with extra inventory space accessible via commands.
 
-```  
-   <CommandHelperConfig Enabled="true" Icon="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Logo_informations.svg/1024px-Logo_informations.svg.png" />
+#### Commands
+- `/vault [name]` - Opens the virtual storage.
+
+#### Configuration
+```xml
+<Vaults>
+  <Vault Name="VIP" Permission="vault.vip" SizeX="10" SizeY="10" />
+  <Vault Name="USER" Permission="vault.user" SizeX="5" SizeY="5" />
+</Vaults>
 ```
 
+---
 
+## Filter System (Auto-Pickup)
+
+A specialized farming tool that automatically picks up specific items from defeated zombies.
+
+- **How to use:**
+    1. Use `/filter` to open the filter management UI.
+    2. Add an item you wish to filter. **Note:** Adding an item consumes it (it is lost from your inventory to be "learned" by the filter).
+    3. From now on, when you kill a zombie that drops that item, it will be automatically placed in your inventory.
+- **Use Case:** Perfect for farm-heavy maps where picking up every item manually is tedious.
+
+---
+
+## Catch Inventory System
+
+A powerful administration tool for live inventory inspection.
+
+- **Usage:** `/catch [player]`
+- **Capabilities:**
+    - View the complete inventory of any online player like a storage box.
+    - Manipulate items: Add, remove, or loot weapons and gear.
+    - Manage clothing: Equip or remove hats, masks, vests, etc.
+
+---
+
+## Utility Modules
+
+| Module | Description | Configuration Highlight |
+| :--- | :--- | :--- |
+| **Auto Clear** | Periodically deletes items, vehicles, or structures to reduce lag. | `Time_Items`, `Time_Vehicles`, `Time_Structures` |
+| **Anti Spam** | Prevents chat flooding by enforcing a message interval. | `Interval` (Time between messages) |
+| **NoName** | Hides player names for Roleplay purposes. | `Bypass` (Admins can still see names) |
+| **Spawn Protection** | Grants invincibility or invisibility upon respawning. | `Protection Seconds`, `Vanish Mode` |
+| **Death Messages** | Formatted alerts for player deaths. | `Show Location`, `Colors`, `Icons` |
+| **Duty** | Allows admins to toggle their permissions on/off. | `/duty`, `Permission` |
+| **Block Damage** | Restricts raid damage to structures/vehicles. | `BlockDamageOfBarricades`, `BlockDamageOfVehicles` |
+| **CheckLag** | Automatically restarts the server if TPS drops too low. | `AutoShutdown`, `TPS Threshold` |
+| **Block Repair** | Prevents players from repairing specific entities. | `Barricades`, `Structures`, `Vehicles` |
+| **Decal Remover** | Clears blood/bullet decals to boost FPS. | `Enabled` |
+| **CommandHelper** | Suggests valid commands (e.g., `/wa` -> `/warp`). | `Enabled`, `Custom Icon` |
+| **Announcer** | Periodic automated server broadcasts. | `Interval`, `RandomMessages`, [Messages XML] |
+| **TextCommands** | Create custom commands that return text (e.g., `/rules`). | [TextCommands XML] |
+| **Anti Admin Abuse** | Alerts the public if an admin uses Vanish or God mode. | `ShowCommandsToThePublic` |
+| **Old Gravity** | Reverts or modifies player gravity physics. | `GravityMultiplier` |
+| **Join Messages** | Configurable join/leave notifications. | `ShowMessageOnJoin` |
+
+---
+
+## Administrative Commands
+
+### Permanent Deletion (WB & WV)
+> [!WARNING]
+> These commands are destructive. Deleting an object or vehicle using these commands is **PERMANENT** and cannot be recovered.
+
+- **WB (Work Block):** Deletes the **structure or barricade** you are currently looking at.
+- **WV (Vehicle Block):** Deletes any **vehicle** you are looking at or nearby.
+
+### Diagnostics & Management
+- **Whois:** Identifies the owner of a structure, barricade, or vehicle.
+- **WhatPerm:** Shows the permission node required for a specific command.
+- **RepairV:** Repairs the vehicle you are looking at or currently sitting in.
+- **ForceDrop [player]:** Forces a player to drop all inventory items onto the ground.
+- **Storage:** View the contents of any chest or storage crate you are looking at.
+- **TPS / UPS:** Displays server performance statistics.
+- **Broma [player]:** For Fun/Troll - Spawns a massive amount of effects at the target's location.
+- **Freeze / Unfreeze:** Restricts or restores a player's ability to move.
+- **Boom [player]:** Creates a powerful explosion at a specific player's location.
+
+---
+
+## Complete Command Reference
+
+| Command | Category | Description |
+| :--- | :--- | :--- |
+| `/ess` | Admin | Main menu: Investigate multis, reload modules, or list plugins. |
+| `/hwid [player]` | Admin | Retrieves the unique Hardware ID of a player. |
+| `/back` | Movement | Teleports you to your last known location. |
+| `/speed [n]` | Movement | Increases or decreases your character speed. |
+| `/sudo [p/*] [c]` | Admin | Force a player to execute a command. |
+| `/door` | Admin | Remotely open or close any player-owned door. |
+| `/storage` | Utility | View internal contents of chests and lockers. |
+| `/filter` | Gameplay | Manage the zombie auto-pickup filter. |
+| `/catch` | Admin | Advanced inventory inspection and management. |
+| `/attach` | Gameplay | Customize weapon attachments. |
+| `/mute / /unmute` | Admin | Manage player chat permissions. |
+| `/whois` | Utility | Trace structure/vehicle ownership. |
+| `/tps` | Diagnostic | View the server's Ticks Per Second. |
+| `/ups` | Diagnostic | View the server's Updates Per Second status. |
+| `/broma` | Fun | Spawn visual effect bursts on a player. |
+| `/experience` | Admin | Manage player experience points. |
+| `/reputation` | Admin | Manage player reputation level. |
+| `/ascend` | Movement | Teleports the player to the next floor/level above. |
+| `/descend` | Movement | Teleports the player to the next floor/level below. |
+| `/boom [player]` | Fun | Detonates an explosion on a player. |
+| `/clear <i/v> [r]` | Utility | Clear items (i) or vehicles (v) in a radius or all. |
+| `/clearinventory` | Admin | Clears all items from a player's inventory. |
+| `/getip [player]` | Admin | View a player's IP address. |
+| `/i [id] [amount]` | Admin | Give a specific item to yourself. |
+| `/jump` | Movement | Teleports the player to their aiming point. |
+| `/maxskills` | Admin | Maximize all character skills instantly. |
+| `/ping` | Utility | Check your current connection latency. |
+| `/pos` | Utility | Display your current map coordinates. |
+| `/pvp` | Gameplay | Toggle your PvP status. |
+| `/suicide` | Gameplay | Commit character suicide. |
+| `/tp [player]` | Movement | Teleport directly to another player. |
+| `/tpall` | Admin | Teleport every online player to your location. |
+| `/tell [p] [m]` | Utility | Send a private whisper to a player. |
+| `/freeze / /unfreeze`| Admin | Prevent or allow player movement. |
+| `/whatperm [cmd]` | Utility | Check required permission node for a command. |
+| `/repair` | Utility | Repairs the item currently in hand. |
+| `/repairv` | Utility | Repairs the vehicle being looked at or driven. |
+| `/refuel` | Utility | Sets a vehicle's fuel to maximum. |
+| `/unrefuel` | Utility | Empties a vehicle's fuel tank completely. |
+| `/forcedrop [p]` | Admin | Forces a player to drop their entire inventory. |
+| `/wb` | Admin | Permanently delete structures/barricades. |
+| `/wv` | Admin | Permanently delete vehicles. |
