@@ -289,3 +289,29 @@ A powerful administration tool for live inventory inspection.
 | `/forcedrop [p]` | Admin | Forces a player to drop their entire inventory. |
 | `/wb` | Admin | Permanently delete structures/barricades. |
 | `/wv` | Admin | Permanently delete vehicles. |
+
+---
+
+## 🛠️ Technical Deep Dive
+
+### Weapon Attachment System (`/attach`)
+The `/attach` command uses advanced metadata manipulation to modify weapons in real-time without requiring physical items.
+- **Metadata Management:** Every item in Unturned has a `metadata` byte array. This plugin parses that array into a structured `WeaponMetadata` object.
+- **Dynamic Updates:** When you run a command like `/attach sight 123`, the plugin:
+    1.  Locates the weapon in the player's primary or secondary slot.
+    2.  Deep-parses the current attachments, ammo count, and fire mode.
+    3.  Injects the new ID into the specific metadata index (Sight, Grip, Tactical, Barrel, or Ammo).
+    4.  Re-builds the byte array and replaces the existing item with a "cloned" version containing the new data.
+- **Fire Rate Override:** It can forcefully swap between Safety, Semi-Auto, and Full-Auto modes by Bit-shifting the metadata flags.
+
+### Multi-Account & HWID Detection (`DatabasePlayer.cs`)
+This system provides a robust layer of security against ban evaders and alt-account abusers.
+- **Identity Linkage:** The plugin creates a unique profile for every player in `PlayersData.json`. It links multiple accounts together if they share the same **HWID (Hardware ID)**.
+- **Detection Algorithm:**
+    - **Recursive Search:** When an administrator uses `/ess investigate`, the plugin performs a recursive search. If Account A shares a HWID with Account B, and Account B shared an IP with Account C, all three are flagged as related.
+    - **Strict Verification (`IsMultiStrict`):** Upon connection, the plugin finds all accounts sharing the current player's HWID. It identifies the "Owner" (the account with the earliest `FirstSeen` timestamp). If the connecting account is NOT the owner, it is flagged as an alt-account.
+- **Blocking Mechanism:** 
+    - This is controlled by the `BlockMultipleAccounts` configuration (Boolean).
+    - If enabled, any flagged alt-account will be automatically kicked from the server.
+    - **Bypass:** Players with the `essentials.bypassaccount` permission or server administrators are exempt from this check.
+
